@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from clickhouse_driver import Client
 
 def config(section, filename = 'config.ini'): #read constant variables
     # create a parser
@@ -46,9 +47,21 @@ def parse_log_from_file(file_name):
     except IOError:
         print("an IOError has occured")
 
+def insert_into_db():
+
+    client = Client('localhost', user = 'default', database = 'testlogs', password = 'qwerty')
+    
+    result = client.execute('SELECT now(), version()')
+
+    for t in result:
+        print(" ROW: {0}: {1}".format(type(t), t))
+    for v in t:
+            print("  COLUMN: {0}: {1}".format(type(v), v))
+
 def main():
     parsed = parse_log_from_file('head 2020-11-10_16:06.log')
-    for i in parsed:
-        print (i)
+    for i in range(5):
+        print(parsed[i])
+    insert_into_db()
 
 main()
