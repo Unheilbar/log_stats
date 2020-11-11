@@ -78,9 +78,10 @@ def get_hostname(string):
 
 
 def get_sql_command(table_name, parsed_data):
-    values = '), ('.join(','.join(x) for x in parsed_data)
+    values = '), ('.join(', '.join(x) for x in parsed_data)
     values = '(' + values + ')'
     command = 'INSERT INTO {0} (event_date, ip_server, url, ip_nat, ip_abon, protocol_type) VALUES {1}'.format(table_name, values)
+    return command
 
 
 def insert_into_db(parsed_data):
@@ -98,6 +99,8 @@ def insert_into_db(parsed_data):
         table_name = config('Clickhouse_table_data')['table_name'] #get table name from config file
 
         sql_command = get_sql_command(table_name, parsed_data)
+
+        print(sql_command)
 
         subprocess.run(['clickhouse-client','--host', hostname, '--database', database, '--password',password , '--query', sql_command]) #execute comand for inserting data
 
