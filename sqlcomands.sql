@@ -14,6 +14,7 @@ ORDER BY
     (event_date, ip_abon)
 
 
+
 CREATE TABLE test.nat_logs (date date DEFAULT toDate (event_date), event_date DateTime, ip_abon String, ip_nat String, id_nat_list Int32, url String, url_reg String DEFAULT replaceRegexpOne (url, '[?](.)+', ''), ip_server String, uid UInt32, tariff UInt16, s days_in_block UInt16, block_type UInt8) ENGINE = ReplicatedMergeTree ('/clickhouse/tables/{shard}/test/nat_logs_replicated_bc', '{replica}')
 PARTITION BY toMonday (date)
 ORDER BY
