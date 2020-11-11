@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS test_logs (
     event_date DateTime ('Asia/Vladivostok'),
     ip_abon IPv4,
     ip_nat IPv4,
-    id_nat_list Int32,
     url String,
     ip_server IPv4,
     protocol_type UInt8 
