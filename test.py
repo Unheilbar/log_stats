@@ -30,20 +30,20 @@ def config(section, filename = '.ENV'): #constants initizalization
 def parse_log_line(line): #function for parsing a single line from log
     splitted = line.split()
     if len(splitted) == 8:
-        date = ' '.join([splitted[0],splitted[1]])
-        ip_abon = splitted[2]
-        ip_nat = splitted[3]
-        id_nat_list = int(splitted[5])
-        url = splitted[6].split('://')[1]
+        date = '\'' + ' '.join([splitted[0],splitted[1]]) + '\''
+        ip_abon = '\'' + splitted[2] + '\''
+        ip_nat = '\'' + splitted[3]+'\''
+        id_nat_list = splitted[5]
+        url = '\'' + splitted[6].split('://')[1] + '\''
         protocol = splitted[6].split('://')[0]
         if(protocol == 'http'):
-            protocol_type = '1'
+            protocol_type = '\'' + '1' + '\''
         elif (protocol == 'https'):
-            protocol_type = '2'
+            protocol_type = '\'' + '2' + '\''
         else:
-            protocol_type = '3'
+            protocol_type = '\'' + '3' + '\''
  
-        ip_server = splitted[7][1:-1].split(':')[0]
+        ip_server = '\'' + splitted[7][1:-1].split(':')[0] + '\''
 
         return [date, ip_abon, ip_nat, url, ip_server, protocol_type]
         
@@ -80,7 +80,7 @@ def get_hostname(string):
 def get_sql_command(table_name, parsed_data):
     values = '), ('.join(', '.join(x) for x in parsed_data)
     values = '(' + values + ')'
-    command = 'INSERT INTO {0} (event_date, ip_server, url, ip_nat, ip_abon, protocol_type) VALUES {1}'.format(table_name, values)
+    command = 'INSERT INTO {0} (event_date, ip_abon, ip_nat, url, ip_server, protocol_type) VALUES {1}'.format(table_name, values)
     return command
 
 
@@ -102,7 +102,7 @@ def insert_into_db(parsed_data):
 
         print(sql_command)
 
-        subprocess.run(['clickhouse-client','--host', hostname, '--database', database, '--password',password , '--query', sql_command]) #execute comand for inserting data
+        subprocess.run(['clickhouse-client','--host', hostname, '--database', database, '--password',password , '--query', sql_command]) #execute command for inserting data
 
         print('Command has executed successfully')
 

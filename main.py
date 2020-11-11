@@ -128,7 +128,7 @@ def main():
 
     max_logs_per_execute = int(config('limits')['max_logs_per_execute']) #max logs for reading per one execute
 
-   #update_table_data(path, max_logs_per_execute) #update table data
+    update_table_data(path, max_logs_per_execute) #update table data
 
 
 main()
