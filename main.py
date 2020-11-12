@@ -70,7 +70,6 @@ def rename_current_log(path, name): #changes name of the current log file
 
 def getHostname(string):
     week_number = datetime.now().isocalendar()[1]
-
     hostnames = string.split()
     current_hostname = hostnames[week_number % 2]     #choose current hostname for inserting data in the table
                                                       #current hostname depends on parity of current week
@@ -94,7 +93,7 @@ def insert_into_db(parsed_data):
 
         table_name = config('Clickhouse_table_data')['table_name'] #get table name from config file
 
-        client.execute('INSERT INTO {0} (event_date, ip_server, url, ip_nat, ip_abon, protocol_type) VALUES'.format(table_name), parsed_data) #execute comand for inserting data
+        client.execute('INSERT INTO {0} (event_date, ip_server, url, ip_nat, ip_abon, protocol_type) VALUES'.format(table_name), parsed_data) #execute command for inserting data
 
         print('Command has executed successfully')
 
@@ -111,16 +110,11 @@ def update_table_data(path, max_logs_per_execute):
     for file_name in file_names:
         if(file_name.endswith('.log')):
             if(logs_count < max_logs_per_execute):
-
                 logs_count+=1
-
-                newname = rename_current_log(path, file_name)
-                
+                newname = rename_current_log(path, file_name)                
                 data = parse_logs_from_file(newname)
-
                 if(data):
                     insert_into_db(data)
-
                     delete_current_log(newname)
 
 def main():
@@ -129,6 +123,5 @@ def main():
     max_logs_per_execute = int(config('limits')['max_logs_per_execute']) #max logs for reading per one execute
 
     update_table_data(path, max_logs_per_execute) #update table data
-
 
 main()
